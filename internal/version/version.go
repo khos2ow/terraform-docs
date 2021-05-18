@@ -13,7 +13,6 @@ package version
 import (
 	"fmt"
 	"runtime"
-	"strings"
 	"time"
 )
 
@@ -36,10 +35,10 @@ func init() {
 		version = dev
 	}
 	if commitHash == "" {
-		commitHash = dev
+		commitHash = "HEAD"
 	}
 	if buildDate == "" {
-		buildDate = time.Now().Format(time.RFC3339)
+		buildDate = time.Now().Format("2006-01-02")
 	}
 }
 
@@ -50,9 +49,15 @@ func Short() string {
 
 // Full return the full version of the binary including commit hash and build date
 func Full() string {
-	if !strings.HasSuffix(version, commitHash) {
-		version += " " + commitHash
-	}
-	osArch := runtime.GOOS + "/" + runtime.GOARCH
-	return fmt.Sprintf("%s %s BuildDate: %s", version, osArch, buildDate)
+	// if !strings.HasSuffix(version, commitHash) {
+	// 	version += " " + commitHash
+	// }
+	return fmt.Sprintf(
+		"%s %s/%s (%s %s)",
+		version,
+		runtime.GOOS,
+		runtime.GOARCH,
+		commitHash,
+		buildDate,
+	)
 }
